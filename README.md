@@ -17,7 +17,9 @@ Baza Danych    | SQL Server              | Azure SQL Database
 Konteneryzacja | Docker & Docker Compose | Azure Container Registry
 Sekrety        | .env / User Secrets     | Azure Key Vault  
 
-## Status projektu
+## Diagram architektury
+![Architecture](docs/architecture.png)
 
+## Status projektu
 - [x] Artefakt 1 – Architektura i struktura projektu
 - [ ] Artefakt 2 – Docker Compose i środowisko wielokontenerowe
