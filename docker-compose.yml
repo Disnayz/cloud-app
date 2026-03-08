@@ -1,26 +1,29 @@
-version: '3.9'
-
 services:
   frontend:
-    image: nginx:alpine
-    container_name: cloudtask-frontend
+    build: ./frontend
     ports:
-      - "3000:80"
-    restart: always
-
+      - "8080:80"
+    networks:
+      - cloud-network
+ 
   backend:
-    image: mcr.microsoft.com/dotnet/samples:aspnetapp
-    container_name: cloudtask-backend
+    build: ./backend
     ports:
-      - "8080:8080"
-    restart: always
-
+      - "8081:80"
+    networks:
+      - cloud-network
+ 
   db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: cloudtask-db
+    image: mcr.microsoft.com/azure-sql-edge
+    container_name: cloud-db
     environment:
-      SA_PASSWORD: "Budowa_administracja_aplikacji"
+      SA_PASSWORD: "StrongPassword123!"
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
-    restart: always
+    networks:
+      - cloud-network
+ 
+networks:
+  cloud-network:
+    driver: bridge

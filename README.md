@@ -22,4 +22,4 @@ Sekrety        | .env / User Secrets     | Azure Key Vault
 
 ## Status projektu
 - [x] Artefakt 1 – Architektura i struktura projektu
-- [ ] Artefakt 2 – Docker Compose i środowisko wielokontenerowe
+- [x] Artefakt 2 – Docker Compose i środowisko wielokontenerowe
