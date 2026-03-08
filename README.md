@@ -9,13 +9,11 @@ Umożliwia tworzenie, edycję, usuwanie oraz przeglądanie zadań.
 Projekt realizowany jako aplikacja cloud-native w Azure.
 
 ## Stos Technologiczny:
-Warstwa        | Technologia             | Usługa Azure 
-
-Frontend       | React 19 + Vite         | Azure Static Web Apps
-Backend API    | .NET 9 Web API          | Azure App Service
-Baza Danych    | SQL Server              | Azure SQL Database
-Konteneryzacja | Docker & Docker Compose | Azure Container Registry
-Sekrety        | .env / User Secrets     | Azure Key Vault  
+| Warstwa | Komponent Lokalny | Usługa Azure |
+| :--- | :--- | :--- |
+| **Presentation** | React 19 (Vite) | Azure Static Web Apps |
+| **Application** | API (.NET 9) | Azure App Service |
+| **Data** | Azure SQL | Azure SQL Database (Serverless) |
 
 ## Diagram architektury
 ![Architecture](docs/architecture.png)
