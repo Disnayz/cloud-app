@@ -43,7 +43,7 @@ using (var scope = app.Services.CreateScope())
         var context = services.GetRequiredService<AppDbContext>();
 
         // tworzy bazę jeśli nie istnieje
-        context.Database.EnsureCreated();
+       // context.Database.EnsureCreated();
 
         // seed danych
         if (!context.Tasks.Any())

@@ -37,9 +37,15 @@ services:
       ACCEPT_EULA: "Y"
     ports:
       - "1433:1433"
+    # Dodawanie wolumenu do kontenetra
+    volumes:
+      - sql-data:/var/opt/mssql
     networks:
       - cloud-network
-
+# Globalna definicja wolumenu
+volumes:
+  sql-data:
+  
 networks:
   cloud-network:
     driver: bridge
