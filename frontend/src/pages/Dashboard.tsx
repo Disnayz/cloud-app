@@ -15,16 +15,26 @@ const Dashboard = () => {
   const [newTaskName, setNewTaskName] = useState(""); 
 
   // 1. Funkcja pobierająca zadania - zdefiniowana osobno, by móc ją wywołać wielokrotnie
-  const fetchTasks = () => {
-    api.get('/tasks')
-      .then((res: any) => {
-        setItems(res.data);
-      })
-      .catch((err: any) => {
-        console.error("Szczegóły błędu:", err);
-        setError("Błąd połączenia z API. Sprawdź, czy backend działa.");
-      });
-  };
+const fetchTasks = () => {
+  api.get('/tasks')
+    .then((res: any) => {
+      const data = res.data;
+
+      console.log("API RESPONSE:", data); // 👈 DEBUG
+
+      if (Array.isArray(data)) {
+        setItems(data);
+      } else if (data?.$values) {
+        setItems(data.$values);
+      } else {
+        setItems([]);
+      }
+    })
+    .catch((err: any) => {
+      console.error("Szczegóły błędu:", err);
+      setError("Błąd połączenia z API. Sprawdź, czy backend działa.");
+    });
+};
 
   // 2. useEffect uruchamia pobieranie danych przy pierwszym wejściu na stronę
   useEffect(() => {
@@ -89,7 +99,7 @@ const Dashboard = () => {
         {items.length === 0 && !error && <p>Brak zadań. Czas coś zaplanować!</p>}
 
         <ul style={{ listStyle: 'none', padding: 0 }}>
-          {items.map((item) => (
+          {Array.isArray(items) && items.map((item) => (
             <li key={item.id} style={{ 
               background: '#f8f9fa', 
               margin: '5px', 

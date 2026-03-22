@@ -1,0 +1,52 @@
+# =========================
+# 🔐 ENV / SECRETS
+# =========================
+.env
+.env.*
+*.env
+appsettings.Development.json
+appsettings.*.json
+
+# =========================
+# 🧱 .NET / C#
+# =========================
+bin/
+obj/
+publish/
+*.user
+*.suo
+*.cache
+*.pdb
+
+# Rider / VS / VSCode
+.vs/
+.vscode/
+.idea/
+
+# =========================
+# ⚛️ FRONTEND (Vite / React)
+# =========================
+node_modules/
+dist/
+build/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# 🐳 DOCKER
+# =========================
+docker-compose.override.yml
+
+# =========================
+# ☁️ AZURE
+# =========================
+.azure/
+.azure-pipelines/
+
+# =========================
+# 🧾 OS
+# =========================
+.DS_Store
+Thumbs.db
