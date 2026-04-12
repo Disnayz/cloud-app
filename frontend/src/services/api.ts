@@ -1,8 +1,7 @@
 import axios from "axios";
  
 const api = axios.create({
-// Vite wymaga prefixu import.meta.env dla zmiennych z .env
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: "https://cloud-task-manager-api-94456-ceazdjf4chcyb9hz.polandcentral-01.azurewebsites.net/api",
 });
  
 export default api;

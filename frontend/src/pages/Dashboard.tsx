@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [items, setItems] = useState<CloudTask[]>([]);
   const [error, setError] = useState("");
   const [newTaskName, setNewTaskName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const fetchTasks = () => {
     api.get('/tasks')
@@ -26,11 +27,16 @@ const Dashboard = () => {
   }, []);
 
   const handleDelete = async (id: number) => {
+    if (!window.confirm("Na pewno usunąć zadanie?")) return;
+
     try {
+      setLoading(true);
       await api.delete(`/tasks/${id}`);
-      setItems(items.filter(item => item.id !== id));
+      setItems(prev => prev.filter(item => item.id !== id));
     } catch (err) {
       setError("Nie udało się usunąć zadania.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,7 +44,7 @@ const Dashboard = () => {
     try {
       const updated = { ...item, isCompleted: !item.isCompleted };
       await api.put(`/tasks/${item.id}`, updated);
-      setItems(items.map(t => t.id === item.id ? updated : t));
+      setItems(prev => prev.map(t => t.id === item.id ? updated : t));
     } catch (err) {
       setError("Nie udało się zaktualizować zadania.");
     }
@@ -73,6 +79,25 @@ const Dashboard = () => {
         ☁️ Cloud App Dashboard – CI/CD WORKS 🚀
       </h1>
 
+      {/* 🔥 NOWY PRZYCISK (UI ONLY) */}
+      <button
+        style={{
+          marginTop: '20px',
+          marginBottom: '20px',
+          padding: '12px 24px',
+          background: 'linear-gradient(135deg, #007bff, #00c6ff)',
+          color: 'white',
+          border: 'none',
+          borderRadius: '10px',
+          cursor: 'pointer',
+          fontWeight: 'bold',
+          fontSize: '16px',
+          boxShadow: '0 4px 10px rgba(0,0,0,0.2)'
+        }}
+      >
+        🚀 Test Button
+      </button>
+
       {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
 
       <form onSubmit={handleAddTask} style={{ marginBottom: '30px' }}>
@@ -87,6 +112,8 @@ const Dashboard = () => {
           Dodaj
         </button>
       </form>
+
+      {loading && <div style={{ marginBottom: '10px' }}>⏳ Przetwarzanie...</div>}
 
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -117,11 +144,21 @@ const Dashboard = () => {
                 </span>
               </div>
 
-              <button 
+              <button
                 onClick={() => handleDelete(item.id)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '18px' }}
+                style={{
+                  background: '#ff4d4f',
+                  border: 'none',
+                  color: 'white',
+                  padding: '6px 10px',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold'
+                }}
+                onMouseOver={(e) => (e.currentTarget.style.background = '#d9363e')}
+                onMouseOut={(e) => (e.currentTarget.style.background = '#ff4d4f')}
               >
-                🗑️
+                Usuń
               </button>
             </li>
           ))}
