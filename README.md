@@ -25,3 +25,4 @@ Projekt realizowany jako aplikacja cloud-native w Azure.
 - [x] Artefakt 4 - Działająca warstwa logiki backendu (.NET 9 + SQL Connection)
 - [x] Artefakt 5 - Przygotowanie projektu pod chmurę
 - [x] Artefakt 6 - Deplyment backend i frontend na Azure
+- [x] Artefakt 6 - Zabezpieczona aplikacja
