@@ -79,27 +79,9 @@ const Dashboard = () => {
         ☁️ Cloud App Dashboard – CI/CD WORKS 🚀
       </h1>
 
-      {/* 🔥 NOWY PRZYCISK (UI ONLY) */}
-      <button
-        style={{
-          marginTop: '20px',
-          marginBottom: '20px',
-          padding: '12px 24px',
-          background: 'linear-gradient(135deg, #007bff, #00c6ff)',
-          color: 'white',
-          border: 'none',
-          borderRadius: '10px',
-          cursor: 'pointer',
-          fontWeight: 'bold',
-          fontSize: '16px',
-          boxShadow: '0 4px 10px rgba(0,0,0,0.2)'
-        }}
-      >
-        🚀 Test Button
-      </button>
-
       {error && <div style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
 
+      {/* 🔥 FORMULARZ */}
       <form onSubmit={handleAddTask} style={{ marginBottom: '30px' }}>
         <input 
           type="text" 
@@ -108,9 +90,31 @@ const Dashboard = () => {
           onChange={(e) => setNewTaskName(e.target.value)}
           style={{ padding: '10px', width: '250px', borderRadius: '4px', border: '1px solid #ccc' }}
         />
-        <button type="submit" style={{ marginLeft: '10px', padding: '10px 20px', cursor: 'pointer' }}>
-          Dodaj
-        </button>
+
+        <div style={{ display: 'inline-flex', gap: '10px', marginLeft: '10px' }}>
+          <button 
+            type="submit" 
+            style={{ padding: '10px 20px', cursor: 'pointer' }}
+          >
+            Dodaj
+          </button>
+
+          {/* 🔥 NOWY PRZYCISK UI ONLY */}
+          <button
+            type="button"
+            style={{
+              padding: '10px 20px',
+              background: '#ff4d4f',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontWeight: 'bold'
+            }}
+          >
+            Usuń
+          </button>
+        </div>
       </form>
 
       {loading && <div style={{ marginBottom: '10px' }}>⏳ Przetwarzanie...</div>}
