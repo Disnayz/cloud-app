@@ -1,36 +1,36 @@
 using CloudBackend.Data;
 using Microsoft.EntityFrameworkCore;
 using CloudBackend.Models;
-using Azure.Identity; // Potrzebne do DefaultAzureCredential
+using Azure.Identity;
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- NOWA SEKCJA: INTEGRACJA Z MAGAZYNEM KLUCZY (KEY VAULT) ---
-// Jeśli aplikacja działa w chmurze (Production), pobieramy hasła z sejfu
-if (builder.Environment.IsProduction())
-{
-    var vaultName = builder.Configuration["KeyVaultName"];
-    if (!string.IsNullOrEmpty(vaultName))
-    {
-        var keyVaultEndpoint = new Uri($"https://{vaultName}.vault.azure.net/");
-        // DefaultAzureCredential automatycznie użyje Tożsamości Zarządzanej w Azure
-        builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
-    }
-}
+// --- KEY VAULT (BEZ WARUNKU - NA TEST) ---
+var keyVaultEndpoint = new Uri("https://kv-cloud-task-manager3.vault.azure.net/");
+builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
 
-// --- SEKCJA USŁUG (Dependency Injection) ---
+// --- DEBUG LOGI ---
+Console.WriteLine("ENV: " + builder.Environment.EnvironmentName);
+Console.WriteLine("KV Name: " + builder.Configuration["KeyVaultName"]);
+Console.WriteLine("CS: " + builder.Configuration["DbConnectionString"]);
 
+// --- SEKCJA USŁUG ---
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Pobieramy Connection String. 
-// Jeśli jesteśmy w Azure, nazwa "DbConnectionString" zostanie automatycznie 
-// pobrana z Magazynu Kluczy dzięki powyższej konfiguracji.
+// Pobranie connection stringa
 var connectionString = builder.Configuration["DbConnectionString"] 
                        ?? builder.Configuration.GetConnectionString("DefaultConnection");
 
-// Rejestracja bazy danych z mechanizmem ponawiania prób (Retry Logic)
+// 🔴 dodatkowy check (żeby nie crashowało bez info)
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new Exception("Connection string is NULL!");
+}
+
+// Rejestracja bazy danych
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString,
         sqlOptions => sqlOptions.EnableRetryOnFailure(
@@ -49,7 +49,7 @@ builder.Services.AddCors(options => {
 
 var app = builder.Build();
 
-// --- AUTOMATYCZNE DANE STARTOWE ---
+// --- SEED ---
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -70,6 +70,7 @@ using (var scope = app.Services.CreateScope())
         Console.WriteLine($"Błąd bazy: {ex.Message}");
     }
 }
+
 // --- MIDDLEWARE ---
 app.UseSwagger();
 app.UseSwaggerUI(c =>
@@ -77,6 +78,7 @@ app.UseSwaggerUI(c =>
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cloud API V1");
     c.RoutePrefix = string.Empty; 
 });
+
 app.UseCors();
 app.MapControllers();
 app.Run();
